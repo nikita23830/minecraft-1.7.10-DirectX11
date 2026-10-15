@@ -1,0 +1,16 @@
+plugins {
+    id("com.gtnewhorizons.gtnhconvention")
+}
+
+def nativeDll = file('native/build/minecraftd3d.dll')
+
+processResources {
+    from(nativeDll) {
+        into 'natives'
+    }
+    doFirst {
+        if (!nativeDll.exists()) {
+            logger.warn("[MinecraftD3D] ${nativeDll} fehlt – das Jar wird ohne DLL gebaut. Zuerst native/build.sh ausführen")
+        }
+    }
+}

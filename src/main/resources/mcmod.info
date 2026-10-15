@@ -1,0 +1,1 @@
+[{"modid": "minecraftd3d", "name": "MinecraftD3D", "description": "Direct3D-11-Renderer ohne OpenGL (Prototyp)", "version": "${modVersion}", "mcversion": "${minecraftVersion}"}]

@@ -1,0 +1,16 @@
+.gradle/
+build/
+out/
+run/
+*.iml
+.idea/
+.vscode/
+.classpath
+.project
+.settings/
+bin/
+
+native/build/
+
+*.log
+__pycache__/

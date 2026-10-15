@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.nikita23830.minecraftd3d.mixins",
+  "refmap": "mixins.minecraftd3d.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "plugin": "com.nikita23830.minecraftd3d.core.MixinPlugin",
+  "injectors": { "defaultRequire": 1 },
+  "client": [
+    "MixinDisplay",
+    "MixinMinecraft",
+    "MixinEntityRenderer",
+    "AccessorEntityRenderer",
+    "MixinRenderGlobal",
+    "MixinWorldClient",
+    "MixinTessellator",
+    "MixinForgeRenderPass",
+    "MixinGuiMainMenu",
+    "MixinChunk",
+    "MixinFontRenderer",
+    "MixinApiHooks",
+    "MixinFramebuffer",
+    "MixinFrameStats",
+    "MixinNetworkManager"
+  ]
+}

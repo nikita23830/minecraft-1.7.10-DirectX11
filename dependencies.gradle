@@ -1,0 +1,3 @@
+dependencies {
+    compileOnly(files("compile-libs/lwjgl3-glfw.jar", "compile-libs/lwjgl3-core.jar", "compile-libs/lwjglx-stubs.jar", "compile-libs/rfb-api.jar", "compile-libs/lwjgl3-glcaps.jar", "compile-libs/lwjgl3ify-api.jar"))
+}
