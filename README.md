@@ -126,3 +126,5 @@ Das Projekt befindet sich im Prototyp-Stadium:
 - auf einigen NVIDIA- und AMD-Grafikkarten treten Darstellungsfehler bei HUD und Inventar auf;
 - der FPS-Gewinn gegenüber OpenGL liegt in Testumgebungen bei etwa 5 %;
 - nur Windows.
+
+Entwickelt KI-gestützt (Claude Code) unter meiner Leitung – Architektur, Messmethodik und Bewertung der Ergebnisse.
