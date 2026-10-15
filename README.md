@@ -8,6 +8,8 @@ GL-Aufrufe von Vanilla und Mods werden auf Bytecode-Ebene abgefangen und von ein
 von OpenGL auf D3D11 ausgeführt: Matrizen, Zustände, Display Lists, `glBegin`, Vertex-Arrays und VBOs, Texturen, FBOs,
 Pixel-Auslesen. Deshalb funktionieren die meisten Mods ohne Änderungen.
 
+*Entwickelt KI-gestützt (Claude Code) unter meiner Leitung – Architektur, Messmethodik und Bewertung der Ergebnisse.*
+
 ## Voraussetzungen
 
 - Windows 10/11 x64, Grafikkarte mit Direct3D-11-Unterstützung.
@@ -118,13 +120,39 @@ Der erste Befehl baut `native/build/minecraftd3d.dll`, der zweite `build/libs/mi
 | `native/` | Quellcode von `minecraftd3d.dll` (C++17, D3D11) und Build-Skript |
 | `compile-libs/` | Bibliotheken nur zum Kompilieren (LWJGL3, lwjglx, RFB, lwjgl3ify), werden nicht in den Mod gepackt |
 
-## Bekannte Einschränkungen
+## Kompatibilität mit Grafikkarten
 
-Das Projekt befindet sich im Prototyp-Stadium:
+Das Projekt befindet sich im Prototyp-Stadium und läuft nur unter Windows.
 
-- auf Intel Arc kann die Welt verzerrt dargestellt werden;
-- auf einigen NVIDIA- und AMD-Grafikkarten treten Darstellungsfehler bei HUD und Inventar auf;
-- der FPS-Gewinn gegenüber OpenGL liegt in Testumgebungen bei etwa 5 %;
-- nur Windows.
+| Grafikkarte | Zustand | Bekannte Fehler |
+|---|---|---|
+| NVIDIA | spielbar | Darstellungsfehler bei HUD und Inventar |
+| AMD | spielbar | Darstellungsfehler bei HUD und Inventar, selten fehlerhafter Himmel |
+| Intel Arc | viele Fehler | HUD und Inventar, verzerrte Welt, fehlerhafte vorberechnete Chunk-Geometrie, Himmel |
 
-Entwickelt KI-gestützt (Claude Code) unter meiner Leitung – Architektur, Messmethodik und Bewertung der Ergebnisse.
+## Messergebnisse
+
+Testsystem: Intel Arc B580, Windows 11, 28 logische Kerne, Fenster 1920×1009, VSync aus. Szene: Vanilla 1.7.10,
+2629 nicht leere Chunk-Sektionen, davon ca. 975 sichtbar, ca. 1150 Draw Calls pro Frame. Gemessen nach vollständigem
+Laden der Szene und 600 Frames Aufwärmphase: je 1200 Frames mit stehender Kamera und mit 360°-Drehung, Start über
+`javaw.exe`.
+
+| Pfad | FPS (stehend / Drehung) | CPU Hauptthread, ms/Frame | Laden der Szene |
+|---|---|---|---|
+| Vanilla 1.7.10 (OpenGL, Display Lists) | 14 / 12 | 70 / 80 | 634 s |
+| Gleiche Pipeline über OpenGL 4.2 | 971 / 1370 | 1,02 / 0,61 | 5,5 s |
+| **MinecraftD3D (D3D11)** | **1346 / 1598** | **0,47 / 0,23** | 5,6 s |
+
+Bewertung:
+
+- Der große Abstand zu Vanilla kommt von der **Architektur, nicht vom Grafik-API**: Chunk-Meshing in mehreren Threads,
+  eine Sektion = ein Mesh, Frustum Culling. Dieselbe Pipeline über OpenGL erreicht dieselbe Größenordnung.
+- D3D11 gegenüber dem optimierten OpenGL-Pfad: **2- bis 3-mal weniger CPU-Zeit im Hauptthread**, der Prozess belegt
+  etwa halb so viele Kerne. Die GPU-Zeit für die Welt ist in beiden APIs gleich (Abweichung 1–2 %).
+- Gegenüber einem echten Client im OpenGL-Modus mit OptiFine bzw. Neodymium (dort laufen die Chunks ohnehin nicht mehr
+  über Display Lists) liegt der Gewinn bei etwa 5 %. Deshalb wird das Projekt derzeit nicht weiterentwickelt.
+
+## Lizenz
+
+MIT – siehe [LICENSE](LICENSE). Die Bibliotheken in `compile-libs/` (LWJGL3, lwjglx, RetroFuturaBootstrap, lwjgl3ify)
+werden nur zum Kompilieren benötigt und unterliegen ihren eigenen Lizenzen.
